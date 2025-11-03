@@ -1,13 +1,42 @@
-# Prática TDD 4
+# 📋 Agenda de Contatos - Django TDD
 
-Desafio técnico para os alunos da disciplina "Desenvolvimento Web 3"
+> Projeto desenvolvido para a disciplina **Desenvolvimento Web 3** com foco em Test-Driven Development (TDD)
 
+[![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Django-4.x-green.svg)](https://www.djangoproject.com/)
+[![Coverage](https://img.shields.io/badge/Coverage->90%25-brightgreen.svg)](https://coverage.readthedocs.io/)
 
+## 📝 Sobre o Projeto
 
+Sistema de agenda de contatos desenvolvido seguindo metodologia TDD (Test-Driven Development), com autenticação restrita para usuários com e-mail institucional `@fatec.sp.gov.br`.
 
-No ambiente Linux:
+### ✨ Funcionalidades
 
-```console
+#### Sprint 1 ✅
+- 🔐 Sistema de Login/Logout
+- 🎓 Autenticação restrita para e-mails institucionais (@fatec.sp.gov.br)
+- 🏠 Página inicial protegida
+
+#### Sprint 2 ✅
+- ➕ Cadastrar contatos
+- 📋 Listar contatos
+- ✏️ Atualizar contatos
+- 🗑️ Remover contatos
+- 🔒 Proteção de rotas (apenas usuários autenticados)
+- 🧪 Cobertura de testes acima de 90%
+
+## 🚀 Tecnologias Utilizadas
+
+- **Python 3.x**
+- **Django 4.x**
+- **SQLite** (banco de dados)
+- **Coverage.py** (análise de cobertura de testes)
+- **Bootstrap** (frontend)
+
+## 📦 Instalação
+
+### Linux
+```bash
 git clone https://github.com/orlandosaraivajr/Pratica_TDD_4.git
 cd Pratica_TDD_4/
 virtualenv -p python3 venv
@@ -22,17 +51,14 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-No ambiente Windows:
-
-```console
+### Windows
+```bash
 git clone https://github.com/orlandosaraivajr/Pratica_TDD_4.git
 cd Pratica_TDD_4/
 virtualenv venv
-cd venv
-cd scripts
+cd venv\Scripts
 activate.bat
-cd ..
-cd ..
+cd ..\..
 pip install -r requirements.txt
 cd agenda/
 python manage.py migrate
@@ -41,63 +67,113 @@ coverage run --source='.' manage.py test
 coverage html
 python manage.py createsuperuser
 python manage.py runserver
-
 ```
 
-Crie um superusuário com as seguintes credenciais:
+## 🔑 Credenciais de Acesso
 
-- Username <b>admin</b>:
-- E-mail address <b>seu e-mail institucional</b>:
-- Password <b>fatec</b>:
+Ao criar o superusuário, utilize:
 
-### Requisitos da Sprint 1
+- **Username:** admin
+- **E-mail:** seu.email@fatec.sp.gov.br
+- **Password:** fatec
 
-<img src="caso_uso.png">
+## 🧪 Testes
 
-A expectativa do projeto é que tenha-se uma agenda. O que foi priorizado na primeira sprint foi o sistema de login/logout.
-O login somente pode ocorrer com o e-mail institucional @fatec.sp.gov.br 
+### Executar testes
+```bash
+python manage.py test
+```
 
+### Gerar relatório de cobertura
+```bash
+coverage run --source='.' manage.py test
+coverage html
+```
 
-<img src="login.png">
+O relatório HTML estará disponível em `htmlcov/index.html`
 
-Imagem 1: Tela de Login
+## 📊 Estrutura do Projeto
+```
+Pratica_TDD_4/
+│
+├── agenda/
+│   ├── core/              # App principal
+│   │   ├── models.py      # Modelo Agenda
+│   │   ├── views.py       # Views do CRUD
+│   │   ├── forms.py       # Formulários
+│   │   ├── tests.py       # Testes unitários
+│   │   └── urls.py        # Rotas
+│   │
+│   ├── agenda/            # Configurações do projeto
+│   └── manage.py
+│
+├── requirements.txt
+└── README.md
+```
 
-<img src="index.png">
+## 🗃️ Modelo de Dados
 
-Imagem 2: Tela index
+### Agenda
+- **nome_complet** (CharField): Nome do contato
+- **email** (EmailField): E-mail do contato
+- **telefone** (CharField): Telefone do contato
+- **observações** (CharField): Observações do contato
 
-<img src="logout.png">
-Imagem 3: Tela logout
+## 🔒 Segurança
 
-## Requisitos para a Sprint 2
+- ✅ Todas as rotas do CRUD são protegidas por `@login_required`
+- ✅ Autenticação apenas com e-mail institucional
+- ✅ Validação de domínio no momento do cadastro
+- ✅ Proteção contra CSRF habilitada
 
-Agora começa o seu desafio: desenvolver uma agenda de contatos completa com CRUD.
+## 📈 Cobertura de Testes
 
-Com base no modelo implementado (ver imagem abaixo), você deve:
-<img src="model.png">
+O projeto mantém cobertura de testes **acima de 90%**, incluindo:
 
+- ✅ Testes de autenticação
+- ✅ Testes de CRUD completo
+- ✅ Testes de validação de formulários
+- ✅ Testes de proteção de rotas
+- ✅ Testes de modelos
 
-✅ Criar um formulário para o modelo Agenda (pode usar Forms ou ModelForms);
+## 🎯 Rotas Principais
 
-Implementar as seguintes funcionalidades:
+| Rota | Método | Descrição |
+|------|--------|-----------|
+| `/` | GET | Página inicial (protegida) |
+| `/login/` | GET, POST | Login de usuários |
+| `/logout/` | GET | Logout de usuários |
+| `/contatos/` | GET | Listar contatos |
+| `/contatos/novo/` | GET, POST | Cadastrar contato |
+| `/contatos/<id>/editar/` | GET, POST | Editar contato |
+| `/contatos/<id>/deletar/` | POST | Deletar contato |
 
-✅ Cadastrar contato
+## 👨‍💻 Desenvolvimento
 
-✅ Listar contatos
+### Boas Práticas Aplicadas
 
-✅ Atualizar contato
+- 🧪 **TDD**: Testes escritos antes da implementação
+- 📝 **Clean Code**: Código limpo e legível
+- 🔄 **DRY**: Don't Repeat Yourself
+- 🎯 **SOLID**: Princípios de design orientado a objetos
+- 📚 **Documentação**: Código bem documentado
 
-✅ Remover contato
+## 📝 Licença
 
-Proteger todas essas funcionalidades para que apenas usuários logados tenham acesso.
+Este projeto foi desenvolvido para fins educacionais na disciplina **Desenvolvimento Web 3** da FATEC.
 
-Ao final da Sprint 2, o sistema deverá conter um CRUD funcional de contatos em Django.
+## 👤 Autor
 
+**Seu Nome**
+- E-mail institucional: seu.email@fatec.sp.gov.br
+- GitHub: [@seu-usuario](https://github.com/seu-usuario)
 
-## Ajustes nos testes / novos testes
+## 🙏 Agradecimentos
 
-O código fonte passará por atualizações para acomodar estes novos requisitos. Com isso, você deve ajudar os testes existentes e criar novos testes.
+- Prof. Orlando Saraiva Jr. - Criador do repositório base
+- FATEC - Faculdade de Tecnologia de São Paulo
+- Colegas da disciplina Desenvolvimento Web 3
 
-Você recebeu a sprint 1 com uma cobertura de teste acima de 90%. É esperado que ao final da sprint 2 a cobertura mantenha-se neste patamar.
+---
 
-<img src="cobertura_testes.png">
+⭐ Desenvolvido com Django e TDD | FATEC 2025
