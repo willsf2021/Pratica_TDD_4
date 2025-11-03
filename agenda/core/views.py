@@ -5,10 +5,9 @@ from core.forms import LoginForm
 from .forms import AgendaForm
 from .models import Agenda
 
-
 def login(request):
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("index")
 
     form = LoginForm(request.POST or None)
     context = {'form': form}
@@ -16,20 +15,16 @@ def login(request):
     if request.method == "POST":
         if form.is_valid():
             auth_login(request, form.user)
-            return redirect("home")
+            return redirect("index")
         context['acesso_negado'] = True
 
     return render(request, 'login.html', context)
-
 
 def logout(request):
     if request.method == "POST":
         auth_logout(request)
         return render(request, 'logout.html')
-    return redirect("home")
-
-
-
+    return redirect("index")
 
 @login_required
 def home(request):
@@ -40,24 +35,22 @@ def create_contact(request):
     form = AgendaForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('list_contacts')
+        return redirect('list')
 
-    context = {'form': form, 'titulo': "Adicionar contato"}
+    context = {'form': form, 'titulo': "Adicionar Contato"}
     return render(request, 'create_contact.html', context)
 
 @login_required
 def list_contacts(request):
     contacts = Agenda.objects.all().order_by('nome_completo')
-    context = {'contacts': contacts, 'titulo': 'Lista de contatos'}
+    context = {'contacts': contacts, 'titulo': 'Lista de Contatos'}
     return render(request, 'list_contacts.html', context)
-
 
 @login_required
 def detail_contact(request, pk):
     contact = get_object_or_404(Agenda, pk=pk)
-    context = {'contact': contact, 'titulo': contact.nome_completo}
+    context = {'contact': contact, 'titulo': 'Detalhes do Contato'}
     return render(request, 'detail_contact.html', context)
-
 
 @login_required
 def update_contact(request, pk):
@@ -66,11 +59,10 @@ def update_contact(request, pk):
 
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('detail_contact', pk=contact.pk)
+        return redirect('detail', pk=contact.pk)
 
     context = {'form': form, 'titulo': f'Editar {contact.nome_completo}'}
     return render(request, 'update_contact.html', context)
-
 
 @login_required
 def delete_contact(request, pk):
@@ -78,7 +70,7 @@ def delete_contact(request, pk):
 
     if request.method == 'POST':
         contact.delete()
-        return redirect('list_contacts')
+        return redirect('list')
 
     context = {'contact': contact, 'titulo': f'Excluir {contact.nome_completo}'}
     return render(request, 'delete_contact.html', context)
