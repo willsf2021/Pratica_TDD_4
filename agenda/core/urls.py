@@ -1,10 +1,13 @@
 from django.urls import path
-from core.views import login, logout, home
+from core.views import login, logout, home, create_contact, list_contacts, detail_contact
 
 
 urlpatterns = [
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('index/', home, name='index'),
+    path('create_contact/', create_contact, name='create'),
+    path('list_contacts/', list_contacts, name='list'),
+    path('detail_contact/<int:pk>', detail_contact, name='detail'),
     path('', home,name='home')
 ]
