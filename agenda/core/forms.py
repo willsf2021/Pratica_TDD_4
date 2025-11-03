@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from .models import Agenda
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
@@ -46,3 +47,45 @@ class LoginForm(ModelForm):
                 raise ValidationError("Senha incorreta para o e-mail informado.")
 
             self.user = user
+            
+            
+            
+class AgendaForm(ModelForm):
+    class Meta:
+        model = Agenda
+        fields = ('nome_completo', 'telefone', 'email', 'observacao')
+        labels = {
+            'nome_completo': 'Nome Completo:',
+            'telefone': 'Telefone:',
+            'email': 'E-Mail:',
+            'observacao': 'Observação:',
+        }
+        widgets = {
+            'nome_completo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Digite o nome do contato'
+            }),
+            'telefone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Digite o telefone do contato'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Digite o e-mail do contato'
+            }),
+            'observacao': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Opcional'
+            }),
+        }
+        error_messages = {
+            'nome_completo': {'required': "Informe o nome completo do contato."},
+            'telefone': {'required': "Informe o telefone do contato."},
+            'email': {'required': "Informe o e-mail."},
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not email or '@' not in email:
+            raise ValidationError('Informe um e-mail válido.')
+        return email
